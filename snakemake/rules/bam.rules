@@ -88,7 +88,7 @@ rule deeptools_bamCoverage:
         join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/cov.{sample}.RPKM.bw{binwidth}.bw")
+            "deeptools/cov_RPKM.{sample}.bw{binwidth}.bw")
     wildcard_constraints:
         binwidth = "\d+"
     log:
@@ -219,7 +219,7 @@ rule deeptools_computeMatrix:
         bw = sorted(expand(join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/{{what}}.{sample}.RPKM.bw{{binwidth}}.bw"),
+            "deeptools/{{what}}.{sample}.bw{{binwidth}}.bw"),
             sample = config["units"].keys())),
         gtf = join(
             config["refdir"],
@@ -265,12 +265,12 @@ rule deeptools_plotHeatmap:
         mat = join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/scoreMatrix.bw{binwidth}.mat.gz")
+            "deeptools/scoreMatrix.{what}.mat.gz")
     output:
         join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/plot.scoreMatrix.heatmap.k={kmeans}bw{binwidth}.mat.pdf")
+            "deeptools/plot.scoreMatrix.{what}.heatmap.k={kmeans}.mat.pdf")
     params:
         cmd        = config["deeptools"]["cmd_plotHeatmap"],
         kmeans     = config["deeptools"]["kmeans"]

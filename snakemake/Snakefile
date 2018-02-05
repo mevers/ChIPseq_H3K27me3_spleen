@@ -121,15 +121,16 @@ DT_FP = expand(join(
 DT_PROF = expand(join(
     config["analysisdir"],
     config["reference"]["id"],
-    "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.mat.pdf"),
-    what = ["cov"],
+    "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.profile.pdf"),
+    what = ["cov_RPKM"],
     binwidth = config["deeptools"]["binsize"])
 DT_PROF2 = expand(join(
     config["analysisdir"],
     config["reference"]["id"],
-    "deeptools/plot.scoreMatrix.heatmap.k={kmeans}.bw{binwidth}.mat.pdf"),
-    kmeans = config["deeptools"]["kmeans"],
-    binwidth = config["deeptools"]["binsize"])
+    "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.heatmap.k={kmeans}.mat.pdf"),
+    what = ["cov_RPKM"],
+    binwidth = config["deeptools"]["binsize"],
+    kmeans = config["deeptools"]["kmeans"])
 DT_CMP = expand(join(
     config["analysisdir"],
     config["reference"]["id"],

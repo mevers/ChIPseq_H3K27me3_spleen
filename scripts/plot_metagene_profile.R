@@ -182,7 +182,7 @@ lapply(c("pdf", "png"), function(x) ggsave(
     file = sprintf(
         "%s/plot.%s.%s",
         outdir,
-        tools::file_path_sans_ext(basename(input)),
+        gsub("\\.mat", ".profile", tools::file_path_sans_ext(basename(input))),
         x),
     gg,
     bg = "transparent",

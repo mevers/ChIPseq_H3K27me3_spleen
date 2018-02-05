@@ -74,7 +74,7 @@ rule R_plot_metagene_profile:
         pdf = join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.mat.pdf")
+            "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.profile.pdf")
     wildcard_constraints:
         binwidth = "\d+"
     log: "logs/plot_metagene_profile.log"
