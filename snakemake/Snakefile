@@ -127,18 +127,12 @@ DT_PROF = expand(join(
 DT_PROF2 = expand(join(
     config["analysisdir"],
     config["reference"]["id"],
-    "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.heatmap.k={kmeans}.mat.pdf"),
-    what = ["cov_RPKM"],
+    "deeptools/plot.scoreMatrix.{what}.bw{binwidth}.heatmap.k{kmeans}.pdf"),
+    what = ["cov_RPKM", "log2ratio_vs_merged_input"],
     binwidth = config["deeptools"]["binsize"],
     kmeans = config["deeptools"]["kmeans"])
-DT_CMP = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "deeptools/log2ratio.{sample}.vs_input.bw{binwidth}.bw"),
-    sample = sum(config["samples"]["H3K27me3"].values(), []),
-    binwidth = config["deeptools"]["binsize"])
 
-DT_ALL = DT_COR + DT_PCA + DT_PCA2 + DT_FP + DT_PROF + DT_PROF2 + DT_CMP
+DT_ALL = DT_COR + DT_PCA + DT_PCA2 + DT_FP + DT_PROF + DT_PROF2
 
 
 

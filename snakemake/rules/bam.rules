@@ -270,7 +270,7 @@ rule deeptools_plotHeatmap:
         join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/plot.scoreMatrix.{what}.heatmap.k={kmeans}.mat.pdf")
+            "deeptools/plot.scoreMatrix.{what}.heatmap.k{kmeans}.pdf")
     params:
         cmd        = config["deeptools"]["cmd_plotHeatmap"],
         kmeans     = config["deeptools"]["kmeans"]
@@ -286,7 +286,7 @@ rule deeptools_plotHeatmap:
 
 rule deeptools_bamCompare:
     input:
-        ChIP = join(
+        BAM = join(
             config["bamdir"],
             config["reference"]["id"],
             "{sample}.sorted.dedup.bam"),
@@ -298,14 +298,14 @@ rule deeptools_bamCompare:
         join(
             config["analysisdir"],
             config["reference"]["id"],
-            "deeptools/log2ratio.{sample}.vs_{ctrl}.bw{binwidth}.bw")
+            "deeptools/log2ratio_vs_merged_{ctrl}.{sample}.bw{binwidth}.bw")
     params:
         cmd = config["deeptools"]["cmd_bamCompare"]
     version: "1.0"
     shell:
         """
             {params.cmd} \
-            -b1 {input.ChIP} \
+            -b1 {input.BAM} \
             -b2 {input.ctrl_merged} \
             -o {output} \
             --ratio log2 \
