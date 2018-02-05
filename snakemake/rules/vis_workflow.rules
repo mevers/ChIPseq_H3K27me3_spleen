@@ -1,0 +1,35 @@
+# Snakemake rules for visualising snakemake workflow
+#
+# Adjusted from:
+# https://bitbucket.org/snakemake/snakemake/issues/303/creating-flowcharts-in-a-rule-rather-than
+# Author: Maurits Evers
+# License: GPLv3
+# Original date: 20-03-2017
+# Last changed: 20-03-2017
+
+rule visualise_workflow:
+    input:
+        expand("workflow/{graph}.{suf}",
+            graph = ["rulegraph", "dag"],
+            suf = ["pdf", "png"])
+
+
+rule graph:
+    output:
+        "workflow/{graph,(dag|rulegraph)}.dot"
+    shell:
+        """
+            snakemake --{wildcards.graph} \
+            > {output}
+        """
+
+
+rule render_dot:
+    input:
+        "{prefix}.dot"
+    output:
+        "{prefix}.{fmt,(png|pdf)}"
+    shell:
+        """
+            dot -T{wildcards.fmt} < {input} > {output}
+        """

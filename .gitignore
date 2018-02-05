@@ -1,0 +1,31 @@
+# Note: Double star (**) matching only works on git versions >1.8.4
+# On GDUserv (CentOS, 6.6): git version 1.7.4 => MUST INSTALL FROM SOURCE
+
+.snakemake
+
+# All alignment files
+**/*.bam
+**/*.sam
+
+
+# Raw FASTQ files
+**/*.fastq.gz
+**/*.fastq
+
+
+# All BigWig files
+**/*.bw
+
+
+
+# All coverage files
+**/cov.*.bed
+**/*.mat.gz
+
+
+# Reference
+ref/**/*.fa
+ref/**/*.bt2
+ref/**/*.bt2l
+ref/**/*.gtf
+ref/**/*.bed

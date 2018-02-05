@@ -1,0 +1,16 @@
+[Mon Feb 05 2018 11:47:17] Parameter summary
+ input          = analysis/GRCm38+rDNA_repeat/deeptools/scoreMatrix.cov.bw10.mat.gz
+ outdir         = analysis/GRCm38+rDNA_repeat/deeptools
+[Mon Feb 05 2018 11:47:17] Reading data.
+Read 0.0% of 36785 rowsRead 27.2% of 36785 rowsRead 54.4% of 36785 rowsRead 81.6% of 36785 rowsRead 36785 rows and 2006 (of 2006) columns from 0.627 GB file in 00:00:12
+Warning message:
+closing unused connection 3 (analysis/GRCm38+rDNA_repeat/deeptools/scoreMatrix.cov.bw10.mat.gz) 
+[Mon Feb 05 2018 11:47:34] Calculating mean scores and uncertainties.
+[Mon Feb 05 2018 11:47:37] Producing plot..
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[Mon Feb 05 2018 11:47:42] All done.

@@ -1,0 +1,94 @@
+# Snakemake rules for read alignment
+#
+# Author: Maurits Evers
+# License: GPLv3
+# Original date: 21-10-2016
+# Last changed: 16-08-2017
+
+
+# Read alignment using bowtie2
+# Note: We discard unmapped reads.
+# Note: We automatically decide on whether we have SE or PE reads
+# based on the length of input.reads
+rule bowtie2:
+    input:
+        idx = IDX,
+        reads = lambda wildcards: expand(join(
+            config["fastqdir"],
+            "{file}"),
+            file = config["units"][wildcards.sample]),
+        qc = lambda wildcards: expand(join(
+            config["fastqcdir"],
+            "{file}"),
+            file = [w.replace(".fastq.gz", "_fastqc.zip")
+                for w in config["units"][wildcards.sample]])
+    output:
+        join(config["bamdir"], config["reference"]["id"], "{sample}.bam")
+    log:
+        expand(
+            "logs/bowtie2_{ref}_{{sample}}.log",
+            ref = config["reference"]["id"])
+    params:
+        cmd      = config["bowtie2"]["cmd"],
+        ref      = re.sub(".fa", "", REF),
+        in_fmt   = config["bowtie2"]["in_fmt"],
+        phred    = config["bowtie2"]["phred"],
+        maxins   = config["bowtie2"]["maxins"],
+        mismatch = config["bowtie2"]["mismatch"],
+        threads  = config["bowtie2"]["threads"]
+    version: "1.0"
+    run:
+        if (len(input.reads) == 2):
+            shell(" \
+                {params.cmd} \
+                {params.phred} \
+                --no-mixed \
+                --no-discordant \
+                --maxins {params.maxins} \
+                -N {params.mismatch} \
+                --threads {params.threads} \
+                -x {params.ref} \
+                -1 {input.reads[0]} \
+                -2 {input.reads[1]} \
+                2> {log} \
+                | samtools view -bS -F4 - > {output} \
+            ")
+        elif (len(input.reads) == 1):
+            shell(" \
+                {params.cmd} \
+                {params.phred} \
+                -N {params.mismatch} \
+                --threads {params.threads} \
+                -x {params.ref} \
+                -U {input.reads} \
+                2> {log} \
+                | samtools view -bS -F4 - > {output} \
+            ")
+
+
+# Generate summary from bowtie2 alignment stats files
+# Note: This rule is not connected and has no wildcards,
+# and should be run separately, e.g.
+#  snakemake generate_bowtie2_summary_stats
+# Note: Requires Perl script summarise_bowtie2Alignment.pl
+rule generate_bowtie2_summary_stats:
+    input:
+        expand(join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.bam"), \
+            sample = config["units"].keys())
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "alignment_stats.tsv")
+    params:
+        filter     = config["reference"]["id"],
+    version: "1.0"
+    shell:
+        """
+            perl scripts/summarise_bowtie2Alignment.pl \
+            logs \
+            bowtie2_{params.filter} > {output}
+        """

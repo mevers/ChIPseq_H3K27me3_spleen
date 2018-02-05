@@ -1,0 +1,313 @@
+# Snakemake rules to process BAM files
+#
+# Author: Maurits Evers
+# License: GPLv3
+# Original date: 22-10-2016
+# Last changed: 15-08-2017
+
+
+# Include individual tool rule files
+include: "samtools.rules"
+include: "bedtools.rules"
+include: "picard-tools.rules"
+include: "qualimap.rules"
+
+
+# deeptools multiBamSummary
+rule deeptools_multiBamSummary_genome:
+    input:
+        expand(join(
+            config["bamdir"],
+            config["reference"]["id"], "{sample}.sorted.dedup.bam"),
+            sample = config["units"].keys())
+    output:
+        npz = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/cov.all.genome.bw{binwidth}.npz"),
+        tab = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/counts.all.genome.bw{binwidth}.tab")
+    params:
+        cmd     = config["deeptools"]["cmd_multiBamSummary"],
+        labels  = expand("{sample}", sample = config["units"].keys()),
+        threads = config["deeptools"]["threads"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} bins \
+            --bamfiles {input} \
+            -out {output.npz} \
+            --outRawCounts {output.tab} \
+            --labels {params.labels} \
+            --binSize {wildcards.binwidth} \
+            -p {params.threads}
+        """
+
+
+# deeptools multiBamSummary peaks only
+rule deeptools_multiBamSummary_peaks:
+    input:
+        BAM = expand(join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam"),
+            sample = config["units"].keys()),
+        BED = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "MACS/merged_peaks.bed")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/multiBamSummary_results_peaks.npz")
+    params:
+        cmd    = config["deeptools"]["cmd_multiBamSummary"],
+        labels = expand("{sample}", sample = config["units"].keys())
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} BED-file \
+            --BED {input.BED} \
+            --bamfiles {input.BAM} \
+            -out {output} \
+            --labels {params.labels}
+        """
+
+
+# deeptools bamCoverage
+rule deeptools_bamCoverage:
+    input:
+        join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/cov.{sample}.RPKM.bw{binwidth}.bw")
+    wildcard_constraints:
+        binwidth = "\d+"
+    log:
+        expand(
+            "logs/deeptools_bamCoverage_{ref}_{{sample}}_RPKM_bw{{binwidth}}.log",
+            ref = config["reference"]["id"])
+    params:
+        cmd     = config["deeptools"]["cmd_bamCoverage"],
+        threads = config["deeptools"]["threads"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --bam {input} \
+            --outFileName {output} \
+            --outFileFormat bigwig \
+            --binSize {wildcards.binwidth} \
+            --normalizeUsingRPKM \
+            --ignoreForNormalization X Y MT BK000964.3 \
+            -p {params.threads} \
+            --ignoreDuplicates > {log}
+        """
+
+
+# deeptools plotCorrelation
+rule deeptools_plotCorrelation:
+    input:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/cov.all.genome.bw{binwidth}.npz")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/heatmap.cor.genome.bw{binwidth}.pdf")
+    wildcard_constraints:
+        binwidth = "\d+"
+    params:
+        cmd = config["deeptools"]["cmd_plotCorrelation"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --corData {input} \
+            --plotFile {output} \
+            --corMethod spearman \
+            --whatToPlot heatmap \
+            --skipZeros \
+            --plotTitle "Spearman correlation of read counts across genome (binwidth {wildcards.binwidth})" \
+            --removeOutliers \
+            --plotNumbers \
+            --colorMap RdBu \
+            --zMin -1 \
+            --zMax +1
+        """
+
+
+# deeptools plotPCA
+rule deeptools_plotPCA:
+    input:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/cov.all.genome.bw{binwidth}.npz")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/PCA.genome.bw{binwidth}.pdf")
+    wildcard_constraints:
+        binwidth = "\d+"
+    params:
+        cmd = config["deeptools"]["cmd_plotPCA"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --corData {input} \
+            --plotFile {output} \
+            --rowCenter \
+            --plotTitle "PCA based on read counts across genome (binwidth {wildcards.binwidth})"
+        """
+
+
+# deeptools plotFingerprint
+rule deeptools_plotFingerprint:
+    input:
+        expand(join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam"),
+            sample = config["units"].keys())
+    output:
+        pdf = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/fingerprint.bw{binwidth}.skipZeros.pdf"),
+        tab = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/fingerprint.bw{binwidth}.skipZeros.tab")
+    wildcard_constraints:
+        binwidth = "\d+"
+    params:
+        cmd     = config["deeptools"]["cmd_plotFingerprint"],
+        labels  = expand("{sample}", sample = config["units"].keys()),
+        threads = config["deeptools"]["threads"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --bamfiles {input} \
+            --plotFile {output.pdf} \
+            --ignoreDuplicates \
+            --labels {params.labels} \
+            --binSize {wildcards.binwidth} \
+            --skipZeros \
+            --plotTitle "Fingerprints of different samples" \
+            --outRawCounts {output.tab} \
+            -p {params.threads}
+        """
+
+
+# deeptools computeMatrix
+rule deeptools_computeMatrix:
+    input:
+        bw = sorted(expand(join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/{{what}}.{sample}.RPKM.bw{{binwidth}}.bw"),
+            sample = config["units"].keys())),
+        gtf = join(
+            config["refdir"],
+            config["reference"]["id"],
+            config["reference"]["bed_RefSeq"])
+    output:
+        mat = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/scoreMatrix.{what}.bw{binwidth}.mat.gz"),
+        bed = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/region.{what}.scoreMatrix.bw{binwidth}.bed")
+    wildcard_constraints:
+        binwidth = "\d+"
+    params:
+        cmd        = config["deeptools"]["cmd_computeMatrix"],
+        upstream   = config["deeptools"]["cm_upstream"],
+        downstream = config["deeptools"]["cm_downstream"],
+        labels     = sorted(expand("{sample}", sample = config["units"].keys())),
+        threads    = config["deeptools"]["threads"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} scale-regions \
+            --scoreFileName {input.bw} \
+            --regionsFileName {input.gtf} \
+            --outFileName {output.mat} \
+            --outFileSortedRegions {output.bed} \
+            --upstream {params.upstream} \
+            --downstream {params.downstream} \
+            --skipZeros \
+            --binSize {wildcards.binwidth} \
+            --samplesLabel {params.labels} \
+            -p {params.threads}
+        """
+
+
+# deeptools plotHeatmap
+rule deeptools_plotHeatmap:
+    input:
+        mat = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/scoreMatrix.bw{binwidth}.mat.gz")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/plot.scoreMatrix.heatmap.k={kmeans}bw{binwidth}.mat.pdf")
+    params:
+        cmd        = config["deeptools"]["cmd_plotHeatmap"],
+        kmeans     = config["deeptools"]["kmeans"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            -m {input.mat} \
+            -out {output} \
+            --kmeans {params.kmeans}
+        """
+
+
+rule deeptools_bamCompare:
+    input:
+        ChIP = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam"),
+        ctrl_merged = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{ctrl}_merged.bam")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/log2ratio.{sample}.vs_{ctrl}.bw{binwidth}.bw")
+    params:
+        cmd = config["deeptools"]["cmd_bamCompare"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            -b1 {input.ChIP} \
+            -b2 {input.ctrl_merged} \
+            -o {output} \
+            --ratio log2 \
+            --binSize {wildcards.binwidth}
+        """

@@ -1,0 +1,23 @@
+[Tue Jan 30 17:31:42 AEDT 2018] picard.analysis.CollectInsertSizeMetrics HISTOGRAM_FILE=analysis/GRCm38+rDNA_repeat/picard-tools/insert_size/insert_size_H3K27me3_brep1.sorted.pdf INPUT=alignment/GRCm38+rDNA_repeat/H3K27me3_brep1.sorted.bam OUTPUT=analysis/GRCm38+rDNA_repeat/picard-tools/insert_size/insert_size_H3K27me3_brep1.sorted.txt    DEVIATIONS=10.0 MINIMUM_PCT=0.05 METRIC_ACCUMULATION_LEVEL=[ALL_READS] INCLUDE_DUPLICATES=false ASSUME_SORTED=true STOP_AFTER=0 VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json
+[Tue Jan 30 17:31:42 AEDT 2018] Executing as mevers@compute-5-3.local on Linux 2.6.32-504.16.2.el6.x86_64 amd64; Java HotSpot(TM) 64-Bit Server VM 1.8.0_91-b14; Picard version: 2.7.1-SNAPSHOT
+INFO	2018-01-30 17:31:45	SinglePassSamProgram	Processed     1,000,000 records.  Elapsed time: 00:00:02s.  Time for last 1,000,000:    2s.  Last read position: 1:174,857,939
+INFO	2018-01-30 17:31:47	SinglePassSamProgram	Processed     2,000,000 records.  Elapsed time: 00:00:04s.  Time for last 1,000,000:    2s.  Last read position: 2:125,591,103
+INFO	2018-01-30 17:31:49	SinglePassSamProgram	Processed     3,000,000 records.  Elapsed time: 00:00:06s.  Time for last 1,000,000:    2s.  Last read position: 3:97,611,771
+INFO	2018-01-30 17:31:52	SinglePassSamProgram	Processed     4,000,000 records.  Elapsed time: 00:00:09s.  Time for last 1,000,000:    2s.  Last read position: 4:115,492,060
+INFO	2018-01-30 17:31:54	SinglePassSamProgram	Processed     5,000,000 records.  Elapsed time: 00:00:11s.  Time for last 1,000,000:    2s.  Last read position: 5:105,236,194
+INFO	2018-01-30 17:31:56	SinglePassSamProgram	Processed     6,000,000 records.  Elapsed time: 00:00:13s.  Time for last 1,000,000:    2s.  Last read position: 6:94,344,523
+INFO	2018-01-30 17:31:58	SinglePassSamProgram	Processed     7,000,000 records.  Elapsed time: 00:00:15s.  Time for last 1,000,000:    1s.  Last read position: 7:102,423,198
+INFO	2018-01-30 17:32:00	SinglePassSamProgram	Processed     8,000,000 records.  Elapsed time: 00:00:17s.  Time for last 1,000,000:    1s.  Last read position: 8:95,446,579
+INFO	2018-01-30 17:32:02	SinglePassSamProgram	Processed     9,000,000 records.  Elapsed time: 00:00:19s.  Time for last 1,000,000:    1s.  Last read position: 9:98,593,453
+INFO	2018-01-30 17:32:04	SinglePassSamProgram	Processed    10,000,000 records.  Elapsed time: 00:00:21s.  Time for last 1,000,000:    1s.  Last read position: 10:128,494,925
+INFO	2018-01-30 17:32:06	SinglePassSamProgram	Processed    11,000,000 records.  Elapsed time: 00:00:23s.  Time for last 1,000,000:    1s.  Last read position: 11:120,489,623
+INFO	2018-01-30 17:32:07	SinglePassSamProgram	Processed    12,000,000 records.  Elapsed time: 00:00:25s.  Time for last 1,000,000:    1s.  Last read position: 13:38,851,717
+INFO	2018-01-30 17:32:09	SinglePassSamProgram	Processed    13,000,000 records.  Elapsed time: 00:00:27s.  Time for last 1,000,000:    1s.  Last read position: 14:66,440,392
+INFO	2018-01-30 17:32:11	SinglePassSamProgram	Processed    14,000,000 records.  Elapsed time: 00:00:29s.  Time for last 1,000,000:    2s.  Last read position: 16:5,817,501
+INFO	2018-01-30 17:32:14	SinglePassSamProgram	Processed    15,000,000 records.  Elapsed time: 00:00:31s.  Time for last 1,000,000:    2s.  Last read position: 17:46,038,212
+INFO	2018-01-30 17:32:16	SinglePassSamProgram	Processed    16,000,000 records.  Elapsed time: 00:00:33s.  Time for last 1,000,000:    2s.  Last read position: 19:18,897,818
+INFO	2018-01-30 17:32:18	SinglePassSamProgram	Processed    17,000,000 records.  Elapsed time: 00:00:35s.  Time for last 1,000,000:    2s.  Last read position: Y:88,991,446
+WARNING	2018-01-30 17:32:19	CollectInsertSizeMetrics	All data categories were discarded because they contained < 0.05 of the total aligned paired data.
+WARNING	2018-01-30 17:32:19	CollectInsertSizeMetrics	Total mapped pairs in all categories: 0.0
+[Tue Jan 30 17:32:19 AEDT 2018] picard.analysis.CollectInsertSizeMetrics done. Elapsed time: 0.60 minutes.
+Runtime.totalMemory()=2783444992

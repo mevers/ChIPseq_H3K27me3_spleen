@@ -1,0 +1,11 @@
+PASS	Basic Statistics	ENCFF001KVH.fastq.gz
+PASS	Per base sequence quality	ENCFF001KVH.fastq.gz
+PASS	Per sequence quality scores	ENCFF001KVH.fastq.gz
+PASS	Per base sequence content	ENCFF001KVH.fastq.gz
+PASS	Per base GC content	ENCFF001KVH.fastq.gz
+PASS	Per sequence GC content	ENCFF001KVH.fastq.gz
+PASS	Per base N content	ENCFF001KVH.fastq.gz
+PASS	Sequence Length Distribution	ENCFF001KVH.fastq.gz
+FAIL	Sequence Duplication Levels	ENCFF001KVH.fastq.gz
+WARN	Overrepresented sequences	ENCFF001KVH.fastq.gz
+WARN	Kmer Content	ENCFF001KVH.fastq.gz

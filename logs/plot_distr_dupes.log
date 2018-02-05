@@ -1,0 +1,22 @@
+[Wed Jan 31 2018 09:21:39] Parameter summary
+ Input          = analysis/GRCm38+rDNA_repeat/picard-tools/dupes/H3K27me3_brep1.dupes.bam
+ Input          = analysis/GRCm38+rDNA_repeat/picard-tools/dupes/input_brep2.dupes.bam
+ Input          = analysis/GRCm38+rDNA_repeat/picard-tools/dupes/input_brep1.dupes.bam
+ Input          = analysis/GRCm38+rDNA_repeat/picard-tools/dupes/H3K27me3_brep2.dupes.bam
+ outdir         = analysis/GRCm38+rDNA_repeat/picard-tools/dupes
+[Wed Jan 31 2018 09:21:39] Reading BAM files.
+[Wed Jan 31 2018 09:23:55] Tabulate data.
+[Wed Jan 31 2018 09:23:55] Producing plot..
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[Wed Jan 31 2018 09:23:59] All done.

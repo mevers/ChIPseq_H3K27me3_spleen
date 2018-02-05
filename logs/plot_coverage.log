@@ -1,0 +1,23 @@
+[Wed Jan 31 2018 10:09:14] Parameter summary
+ Input                  = analysis/GRCm38+rDNA_repeat/samtools/bedcov/cov.genome_w10000_s1000.input_brep1.bed
+ Input                  = analysis/GRCm38+rDNA_repeat/samtools/bedcov/cov.genome_w10000_s1000.input_brep2.bed
+ Input                  = analysis/GRCm38+rDNA_repeat/samtools/bedcov/cov.genome_w10000_s1000.H3K27me3_brep2.bed
+ Input                  = analysis/GRCm38+rDNA_repeat/samtools/bedcov/cov.genome_w10000_s1000.H3K27me3_brep1.bed
+ outdir                 = analysis/GRCm38+rDNA_repeat/samtools/bedcov
+ skipZeros              = TRUE
+ normaliseToAutosomeCov = TRUE
+[Wed Jan 31 2018 10:09:14] Extracting coverage profile per reference sequence per sample
+[Wed Jan 31 2018 10:10:00] Producing plot.
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+Warning messages:
+1: Transformation introduced infinite values in continuous y-axis 
+2: Removed 118599 rows containing non-finite values (stat_boxplot). 
+3: Transformation introduced infinite values in continuous y-axis 
+4: Removed 118599 rows containing non-finite values (stat_boxplot). 
+[Wed Jan 31 2018 10:11:05] Producing table.
+[Wed Jan 31 2018 10:11:24] All done.

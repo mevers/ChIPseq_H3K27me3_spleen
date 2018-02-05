@@ -1,0 +1,38 @@
+[Wed Jan 31 2018 10:27:57] Parameter summary
+ input          = analysis/GRCm38+rDNA_repeat/deeptools/counts.all.genome.bw10000.tab
+ outdir         = analysis/GRCm38+rDNA_repeat/deeptools
+ scale          = TRUE
+ center         = TRUE
+ maxN           = 0
+[Wed Jan 31 2018 10:27:57] Reading data.
+[Wed Jan 31 2018 10:28:08] Performing PCA.
+[Wed Jan 31 2018 10:28:20] Producing plot.
+Too few points to calculate an ellipse
+Too few points to calculate an ellipse
+geom_path: Each group consists of only one observation. Do you need to adjust
+the group aesthetic?
+Too few points to calculate an ellipse
+Too few points to calculate an ellipse
+geom_path: Each group consists of only one observation. Do you need to adjust
+the group aesthetic?
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+Too few points to calculate an ellipse
+Too few points to calculate an ellipse
+geom_path: Each group consists of only one observation. Do you need to adjust
+the group aesthetic?
+Too few points to calculate an ellipse
+Too few points to calculate an ellipse
+geom_path: Each group consists of only one observation. Do you need to adjust
+the group aesthetic?
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[Wed Jan 31 2018 10:28:23] All done.

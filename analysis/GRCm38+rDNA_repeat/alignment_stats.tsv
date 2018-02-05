@@ -1,0 +1,5 @@
+Sample	Number of reads	Number of mapped reads	Percentage mapped
+bowtie2_GRCm38+rDNA_repeat_H3K27me3_brep1.log	39,383,852	17,421,919	44.24
+bowtie2_GRCm38+rDNA_repeat_H3K27me3_brep2.log	44,981,145	20,268,470	45.06
+bowtie2_GRCm38+rDNA_repeat_input_brep1.log	31,561,765	13,224,618	41.90
+bowtie2_GRCm38+rDNA_repeat_input_brep2.log	29,605,854	10,016,827	33.83

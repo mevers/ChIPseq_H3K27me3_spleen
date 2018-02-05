@@ -1,0 +1,13 @@
+[Wed Jan 31 2018 10:27:42] Parameter summary
+ input          = analysis/GRCm38+rDNA_repeat/deeptools/fingerprint.bw500.skipZeros.tab
+ outdir         = analysis/GRCm38+rDNA_repeat/deeptools
+[Wed Jan 31 2018 10:27:42] Reading data.
+[Wed Jan 31 2018 10:27:42] Calculating normalised rank and cumulative sum based on coverage.
+[Wed Jan 31 2018 10:27:44] Producing plot.
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[Wed Jan 31 2018 10:28:09] All done.

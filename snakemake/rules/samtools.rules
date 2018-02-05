@@ -1,0 +1,216 @@
+# Snakemake rules involving samtools
+# http://samtools.sourceforge.net
+#
+# Note: This rule file should be included in bam.rules.
+# Global variables (e.g. directory paths) should be declared in
+# bam.rules and are passed down to the individual tool rule files!
+#
+# Author: Maurits Evers
+# License: GPLv3
+# Original date: 22-10-2016
+# Last changed: 15-08-2017
+
+
+# Sort and index BAM file
+# Note: samtools sort changed its way to specify commandline
+# options from version <=0.1.19 to 1.x
+# This will potentially break the workflow if run on a machine
+# with samtools other than 1.x
+rule samtools_sort_and_index:
+    input:
+        join(config["bamdir"], config["reference"]["id"], "{sample}.bam")
+    output:
+        bam = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.bam"),
+        bai = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.bam.bai")
+    version: "1.0"
+    params:
+        cmd = config["samtools"]["cmd"]
+    shell:
+        """
+            {params.cmd} sort -o {output.bam} {input};
+            {params.cmd} index {output.bam};
+        """
+
+
+# Remove duplicates using samtools rmdup
+rule samtools_rmdup_and_index:
+    input:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "picard-tools/dupes/{sample}_markedDupes.bam")
+    output:
+        bam = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam"),
+        bai = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam.bai")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} rmdup {input} {output.bam};
+            {params.cmd} index {output.bam}
+        """
+
+
+# Calculate and store statistics using samtools flagstat
+rule flagstat_bam:
+    input:
+        join(config["bamdir"], config["reference"]["id"], "{sample}.bam")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/flagstat/flagstat_{sample}.txt")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} flagstat {input} > {output}
+        """
+
+
+# Merge technical replicates for MACS2
+rule merge_technical_reps:
+    input:
+        lambda wildcards: expand(join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam"),
+            sample = config["samples"][wildcards.sampleid][wildcards.rep])
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "MACS/{sampleid}_{rep}.sorted.dedup.bam")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} merge {output} {input}
+        """
+
+
+# Merge input files
+rule merge_input_bam:
+    input:
+        lambda wildcards: expand(join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sampleid}.sorted.dedup.bam"),
+            sampleid = sorted(sum(
+                config["samples"][wildcards.ctrl].values(), [])))
+    output:
+        join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{ctrl}_merged.bam")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} merge {output} {input};
+            {params.cmd} index {output};
+        """
+
+
+# Calculate sum of per-base read depths per BED region
+# Note: There is some confusion about what samtools bedcov actually
+# calculates (see e.g. https://github.com/samtools/samtools/issues/588).
+# According to the github issue, samtools bedcov calculates the sum of
+# per-base coverage per BED region (as opposed to the sum of reads that
+# overlap with a BED region).
+rule samtools_bedcov:
+    input:
+        BED = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "bedtools/{feature}.bed"),
+        BAM = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/bedcov/cov.{feature}.{sample}.bed")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} bedcov {input.BED} {input.BAM} > {output}
+        """
+
+
+# Calculate sum of per-base read depths per BED region
+# Note: There is some confusion about what samtools bedcov actually
+# calculates (see e.g. https://github.com/samtools/samtools/issues/588).
+# According to the github issue, samtools bedcov calculates the sum of
+# per-base coverage per BED region (as opposed to the sum of reads that
+# overlap with a BED region).
+rule samtools_bedcov_strandspecific:
+    input:
+        BED = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "bedtools/{feature}.bed"),
+        BAM = join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.sorted.dedup.bam")
+    output:
+        s1 = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/bedcov/cov.{feature}.{sample}_s1.bed"),
+        s2 = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/bedcov/cov.{feature}.{sample}_s2.bed")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} view -b -F 0x10 {input.BAM} > tmp_s1.bam;
+            samtools index tmp_s1.bam;
+            {params.cmd} bedcov {input.BED} tmp_s1 > {output.s1};
+            {params.cmd} view -b -F 0x20 {input.BAM} > tmp_s2.bam;
+            samtools index tmp_s2.bam;
+            {params.cmd} bedcov {input.BED} tmp_s2 > {output.s2};
+            rm -f tmp_s1.bam tmp_s2.bam;
+        """
+
+
+
+# Extract duplicate reads flagged by picard-tools MarkDuplicates
+rule extract_read_dupes:
+    input:
+        join(config["analysisdir"], config["reference"]["id"],
+            "picard-tools/dupes/{sample}_markedDupes.bam")
+    output:
+        join(config["analysisdir"], config["reference"]["id"],
+            "picard-tools/dupes/{sample}.dupes.bam"),
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} view -bf 0x400 {input} > {output}
+        """

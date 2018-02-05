@@ -1,0 +1,125 @@
+# Directories
+basedir: ".."
+refdir: "ref/"
+fastqdir: "rawData/"
+fastqcdir: "rawData/QC/"
+bamdir: "alignment/"
+analysisdir: "analysis/"
+
+# Samples
+# Note: Sample values have to match unit keys
+# Generally there is one control per run, but there may
+# (or may not) be multiple replicates for the ChIP library
+samples:
+        H3K27me3:
+            rep1:
+                - H3K27me3_brep1
+            rep2:
+                - H3K27me3_brep2
+        input:
+            rep1:
+                - input_brep1
+            rep2:
+                - input_brep2
+
+
+# Units
+# Note: Unit keys have to match sample values
+units:
+        input_brep1:
+                - ENCFF001KVR.fastq.gz
+        input_brep2:
+                - ENCFF001KWE.fastq.gz
+        H3K27me3_brep1:
+                - ENCFF001KVG.fastq.gz
+        H3K27me3_brep2:
+                - ENCFF001KVH.fastq.gz
+
+
+
+# Reference sequence
+reference:
+    id: "GRCm38+rDNA_repeat"
+    filename: "GRCm38+rDNA_repeat.fa"
+    gtf: "GRCm38+rDNA_repeat.gtf"
+    bed_RefSeq: "GRCm38_RefSeq_genes.bed"
+
+
+# fastqc parameters
+fastqc:
+    cmd: "fastqc"
+
+
+# bbduk.sh parameters
+bbduk:
+    cmd: "bbduk.sh"
+    mem: "-Xmx1g"
+    ref: "rawData/truseq.fa"
+    ktrim: "r"
+    hdist: 1
+    qtrim: "l"
+    trimq: 20
+    minlength: 18
+
+
+# bowtie2-build parameters
+bowtie2-build:
+    cmd: "bowtie2-build"
+
+
+# bowtie2 parameters
+bowtie2:
+    cmd: "bowtie2"
+    in_fmt: "-q"
+    phred: "--phred33"
+    maxins: 500
+    mismatch: 0
+    threads: 6
+
+
+# samtools parameters
+samtools:
+    cmd: "samtools"
+
+
+# picard parameters
+picard:
+    cmd: "java -jar ~/Programs/picard.jar"
+
+
+# QualiMap parameters
+qualimap:
+    cmd: "~/Programs/qualimap_v2.2.1/qualimap"
+
+
+# bedtools parameters
+bedtools:
+    cmd: "bedtools"
+    window_size: 10000
+    window_step: 1000
+
+
+# deeptools parameters
+deeptools:
+    cmd_multiBamSummary: "~/miniconda3/envs/py27/bin/multiBamSummary"
+    cmd_plotCorrelation: "~/miniconda3/envs/py27/bin/plotCorrelation"
+    cmd_plotPCA: "~/miniconda3/envs/py27/bin/plotPCA"
+    cmd_plotFingerprint: "~/miniconda3/envs/py27/bin/plotFingerprint"
+    cmd_bamCoverage: "~/miniconda3/envs/py27/bin/bamCoverage"
+    cmd_computeMatrix: "~/miniconda3/envs/py27/bin/computeMatrix"
+    cmd_plotHeatmap: "~/miniconda3/envs/py27/bin/plotHeatmap"
+    cmd_bamCompare: "~/miniconda3/envs/py27/bin/bamCompare"
+    cm_upstream: 2000
+    cm_downstream: 2000
+    threads: 12
+    binsize: 10
+    kmeans: 3
+
+
+# MACS2 parameters
+# Note: Even though macs2 accepts gsize = mm, gsize needs
+# to be a numeric for further downstream bash maths
+macs2:
+    cmd: "~/miniconda3/envs/py27/bin/macs2"
+    gsize: 1.87e9
+    qvalue: 0.01
