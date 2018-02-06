@@ -29,3 +29,6 @@ ref/**/*.bt2
 ref/**/*.bt2l
 ref/**/*.gtf
 ref/**/*.bed
+
+# deeptools plotHeatmap matrices
+**/heatmapMatrix*.bed

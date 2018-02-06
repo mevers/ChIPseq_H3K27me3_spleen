@@ -273,13 +273,23 @@ rule deeptools_plotHeatmap:
             "deeptools/plot.scoreMatrix.{what}.heatmap.k{kmeans}.pdf")
     params:
         cmd        = config["deeptools"]["cmd_plotHeatmap"],
-        kmeans     = config["deeptools"]["kmeans"]
+        kmeans     = config["deeptools"]["kmeans"],
+        regions    = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/heatmapRegions.k{kmeans}.{what}.bed"),
+        matrix     = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/heatmapMatrix.k{kmeans}.{what}.tab")
     version: "1.0"
     shell:
         """
             {params.cmd} \
             -m {input.mat} \
             -out {output} \
+            --outFileSortedRegions {params.regions} \
+            --outFileNameMatrix {params.matrix} \
             --kmeans {params.kmeans}
         """
 
