@@ -1,0 +1,14 @@
+# Raw sequencing data
+
+Reference epigenome series in spleen (Mus musculus, adult, 8 week)
+Targets: H3K27ac, H3K4me3, H3K36me3, H3K27me3, H3K4me1, Control
+Lab: ENCODE Consortium (Bing Ren, UCSD)
+Project: ENCODE
+Link: https://www.encodeproject.org/reference-epigenomes/ENCSR902FHL/
+
+
+# Sequencing data specifications
+
+Paired-end or single-end: Single-end
+Read length: 36 bp
+Read depth: 30 - 45 million reads
