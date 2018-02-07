@@ -31,4 +31,4 @@ ref/**/*.gtf
 ref/**/*.bed
 
 # deeptools plotHeatmap matrices
-**/heatmapMatrix*.bed
+**/heatmapMatrix*.tab
