@@ -2,6 +2,7 @@
 
 This repository contains snakemake workflow rules and configuration files for the analysis of H3K27me3 ChIP-seq data from the [ENCODE Consortium](https://www.encodeproject.org/reference-epigenomes/ENCSR902FHL).
 
+
 ## Raw sequencing data
 
 Raw sequencing data can be downloaded from the ENCODE Experiment summary website.
@@ -12,6 +13,7 @@ Raw sequencing data can be downloaded from the ENCODE Experiment summary website
 4. [Input data for replicate 2](https://www.encodeproject.org/files/ENCFF001KWE)
 
 The gzipped FASTQ files must be placed in rolder `./rawData`.
+
 
 ## Requirements
 
