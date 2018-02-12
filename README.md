@@ -15,9 +15,11 @@ The gzipped FASTQ files must be placed in rolder `./rawData`.
 
 ## Requirements
 
-1. Raw sequencing data must be downloaded manually and place in folder `./rawData`.
+1. Raw sequencing data must be downloaded manually and placed in folder `./rawData`.
 
-2. The full analysis was tested using the following program/package versions:
+2. The reference genome needs to be downloaded manually by executing `./ref/GRCm38+rDNA_repeat/download_Ensembl_ref.sh`.
+
+3. The full analysis was tested using the following program/package versions:
 
     * bedtools 2.25.0-24-g3d31735-dirty
     * bowtie2 and bowtie2-build 2.2.6
@@ -26,6 +28,7 @@ The gzipped FASTQ files must be placed in rolder `./rawData`.
     * picard-tools 2.7.1-SNAPSHOT
     * samtools 1.3.1
     * snakemake 3.9.0
+    * wget 1.12
 
 
 ## Author
