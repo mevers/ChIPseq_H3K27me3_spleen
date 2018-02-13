@@ -1,0 +1,129 @@
+---
+title: "Summary H3K27me3 ChIP-seq"
+author: "Maurits Evers"
+date: "Version 1.0 (`r format(Sys.time(), '%d %B %Y')`)"
+output:
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+    fig_width: 10.5
+    fig_height: 5.5
+    fig_caption: false
+    df_print: paged
+    toc: yes
+#    incremental: true
+#    css: styles.css
+---
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  CommonHTML: {
+    scale: 130
+  }
+});
+</script>
+
+
+```{r echo=FALSE}
+# knitr options
+knitr::opts_chunk$set(echo = FALSE)
+
+# Load libraries
+suppressMessages(library(DT));           # Interactive datatables
+```
+
+## Alignment summary stats
+```{r echo=FALSE}
+df <- read.delim("../../analysis/GRCm38+rDNA_repeat/alignment_stats.tsv");
+df$Sample <- gsub("(bowtie2_GRCm38\\+rDNA_repeat_|.log)", "", df$Sample);
+df$Condition <- ifelse(
+    grepl("UBF", df[, 1]),
+    "ChIP",
+    "Input");
+DT::datatable(df,
+    options = list(
+        pageLength = 10,
+        dom = "fti",
+        order = list(list(0, "asc")),
+        scrollX = TRUE),
+    rownames = FALSE);
+```
+
+
+## Read duplication metrics
+```{r echo=FALSE}
+df <- read.delim(
+    "../../analysis/GRCm38+rDNA_repeat/picard-tools_MarkDuplicates_stats.tsv");
+df$Sample <- gsub(".txt", "", df$Sample);
+df$Condition <- ifelse(
+    grepl("UBF", df[, 1]),
+    "ChIP",
+    "Input");
+DT::datatable(df,
+    options = list(
+        pageLength = 10,
+        dom = "fti",
+        order = list(list(0, "asc")),
+        scrollX = TRUE),
+    rownames = FALSE);
+```
+
+
+## Read coverage per bp per ref seq per sample
+<p style="margin-top:-2em" align="center">
+<img src = "../../analysis/GRCm38+rDNA_repeat/samtools/bedcov/plot.coverage.png" alt="Alternative" width="840">
+</p>
+
+
+## Read coverage per bp per ref seq per sample
+```{r echo=FALSE}
+df <- read.csv(
+    "../../analysis/GRCm38+rDNA_repeat/samtools/bedcov/coverage_per_bp.csv");
+DT::datatable(df,
+    options = list(
+        pageLength = nrow(df),
+        dom = "fti",
+        scrollX = TRUE,
+        scrollY = "400px"),
+    rownames = FALSE);
+```
+
+
+## Duplication as fraction of total duplicate reads
+<p style="margin-top:-2em" align="center">
+<img src = "../../analysis/GRCm38+rDNA_repeat/picard-tools/dupes/plot.distr_dupes_frac.png" alt="Alternative" width="840">
+</p>
+
+
+## Duplication per kb (DPK)
+<p style="margin-top:-2em" align="center">
+<img src = "../../analysis/GRCm38+rDNA_repeat/picard-tools/dupes/plot.distr_dupes_DPK.png" alt="Alternative" width="840">
+</p>
+
+
+## PCA based on genome coverage
+<p style="margin-top:-2em" align="center">
+<img src = "../../analysis/GRCm38+rDNA_repeat/deeptools/plot.PCA.PC1_vs_PC2.counts.all.genome.bw10000.png" alt="Alternative" width="760">
+</p>
+
+
+## Fingerprint plot 1
+<p align="center">
+<img src = "QC_fingerprint.png" alt="Alternative" width="840">
+</p>
+<p style="font-size:50%" align="right"> [[http://deeptools.readthedocs.io/en/latest/content/tools/plotFingerprint.html]](http://deeptools.readthedocs.io/en/latest/content/tools/plotFingerprint.html)</p>
+
+
+## Fingerprint plot 2
+<p style="margin-top:-2em" align="center">
+<img src = "../../analysis/GRCm38+rDNA_repeat/deeptools/plot.fingerprint.bw500.skipZeros.png" alt="Alternative" width="840">
+</p>
+
+
+## Meta-gene score profile
+<p style="margin-top:-2em" align="center">
+<img src = "../../analysis/GRCm38+rDNA_repeat/deeptools/plot.scoreMatrix.cov_RPKM.bw10.profile.png" alt="Alternative" width="840">
+</p>
+
+
+## Results and conclusion
